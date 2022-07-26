@@ -44,7 +44,7 @@ app.get("/api/messages", (req, res) => {
 	if (!req.query.auth) return res.sendStatus(403);
 	if (req.query.auth !== process.env.API_KEY) return res.sendStatus(403);
 	res.send(messageCache);
-	messageCache = {};
+	messageCache = [];
 })
 
 app.post("/api/hof", (req, res) => {
