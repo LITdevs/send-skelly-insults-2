@@ -1,0 +1,26 @@
+{
+  "name": "send-skelly-insults",
+  "version": "2.0.0",
+  "description": "Send notification to phone haha",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LITdevs/send-skelly-insults-2.git"
+  },
+  "author": "Skelly",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/LITdevs/send-skelly-insults-2/issues"
+  },
+  "homepage": "https://github.com/LITdevs/send-skelly-insults-2#readme",
+  "dependencies": {
+    "discord-webhook-node": "^1.1.8",
+    "dotenv": "^16.0.1",
+    "ejs": "^3.1.8",
+    "express": "^4.18.1",
+    "express-rate-limit": "^6.5.1"
+  }
+}
