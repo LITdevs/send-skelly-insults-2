@@ -34,7 +34,7 @@ app.post("/api/send", messageLimiter, (req, res) => {
 	if (req.body.message.trim().length > lengthLimit) return res.status(400).send("Message too long.");
 	if (req.body?.author?.trim().length > authorLimit) return res.status(400).send("Author too long.");
 	if (req.body.message.trim().length < 1) return res.status(400).send("Message too short.");
-	let finalMessage = { message: req.body.message.trim() };
+	let finalMessage = { message: req.body.message.trim(), ip: req.headers["cf-connecting-ip"] };
 	finalMessage.title = `New insult${req.body.author ? "from " + req.body.author.trim() : ""}`;
 	messageCache.push(finalMessage);
 	res.redirect("/?sent=true")
@@ -52,6 +52,16 @@ app.post("/api/hof", (req, res) => {
 	if (req.body.auth !== process.env.API_KEY) return res.sendStatus(403);
 	if (!req.body.message) return res.sendStatus(400);
 	hook.send(req.body.message);
+	res.sendStatus(200);
+})
+
+app.post("/api/ipbl", (req, res) => {
+	if (!req.body.auth) return res.sendStatus(403);
+	if (req.body.auth !== process.env.API_KEY) return res.sendStatus(403);
+	if (!req.body.ip) return res.sendStatus(400);
+	if (banlist.banned_ips.includes(req.body.ip)) return res.sendStatus(400);
+	banlist.banned_ips.push(req.body.ip);
+	fs.writeFileSync("banlist.json", JSON.stringify(banlist));
 	res.sendStatus(200);
 })
 
