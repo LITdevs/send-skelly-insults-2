@@ -35,7 +35,7 @@ app.post("/api/send", messageLimiter, (req, res) => {
 	if (req.body?.author?.trim().length > authorLimit) return res.status(400).send("Author too long.");
 	if (req.body.message.trim().length < 1) return res.status(400).send("Message too short.");
 	let finalMessage = { message: req.body.message.trim(), ip: req.headers["cf-connecting-ip"] };
-	finalMessage.title = `New insult${req.body.author ? "from " + req.body.author.trim() : ""}`;
+	finalMessage.title = `New insult${req.body.author ? " from " + req.body.author.trim() : ""}`;
 	messageCache.push(finalMessage);
 	res.redirect("/?sent=true")
 })
