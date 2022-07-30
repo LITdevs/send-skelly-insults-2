@@ -5,7 +5,7 @@ const { Webhook } = require('discord-webhook-node');
 require("dotenv").config();
 const hook = new Webhook(process.env.WEBHOOK);
 const rateLimit = require("express-rate-limit");
-app.use("/resources", express.static('public/resources'))
+app.use("/resources", express.static('resources'))
 app.use(express.urlencoded({extended:true}));
 app.use(express.json())
 app.set('trust proxy', 1);
