@@ -66,10 +66,13 @@ app.post("/api/ipbl", (req, res) => {
 })
 
 app.get("/", (req, res) => {
-	res.render("index", {sent: false});
+	res.render("index", {sent: false, banned: false});
 })
 app.get("/sent", (req, res) => {
-	res.render("index", {sent: true});
+	res.render("index", {sent: true, banned: false});
+})
+app.get("/banned", (req, res) => {
+	res.render("index", {sent: false, banned: true});
 })
 
 app.listen(83, () => {
