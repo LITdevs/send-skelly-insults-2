@@ -14,6 +14,9 @@ app.set('view engine', "ejs");
 const messageLimiter = rateLimit({
 	windowMs: 30000,
 	max: 1,
+	handler: function(req, res) {
+		return res.redirect("/ratelimited");
+	},
 	keyGenerator: function (req) {
 		return req.headers["cf-connecting-ip"];
 	}
@@ -66,13 +69,16 @@ app.post("/api/ipbl", (req, res) => {
 })
 
 app.get("/", (req, res) => {
-	res.render("index", {sent: false, banned: false});
+	res.render("index", {sent: false, banned: false, ratelimit: false});
 })
 app.get("/sent", (req, res) => {
-	res.render("index", {sent: true, banned: false});
+	res.render("index", {sent: true, banned: false, ratelimit: false});
 })
 app.get("/banned", (req, res) => {
-	res.render("index", {sent: false, banned: true});
+	res.render("index", {sent: false, banned: true, ratelimit: false});
+})
+app.get("/ratelimited", (req, res) => {
+	res.render("index", {sent: false, banned: true, ratelimit: true});
 })
 
 app.listen(83, () => {
