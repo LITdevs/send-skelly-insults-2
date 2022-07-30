@@ -65,7 +65,7 @@ app.post("/api/ipbl", (req, res) => {
 	res.sendStatus(200);
 })
 
-app.get("/", (req, res) => {
+app.get("*", (req, res) => {
 	res.render("index");
 })
 
