@@ -66,9 +66,10 @@
       <% if(sent) { %>
         <h1>Message sent!</h1>
         <p>I hope it's something creative...</p>
-        <img src="https://vukkybox.com/resources/vukkied.svg">
+        <img src="https://vukkybox.com/resources/vukkied.svg" style="position: absolute; left: 68%; top: 78%;" height="100em">
       <% } else if (banned) {%>
         <h1>You are banned.</h1>
+        <img src="https://vukkybox.com/resources/vukkied.svg" style="position: absolute; left: 68%; top: 78%;" height="100em">
       <% } else {%>
         <h1>Dear Vukky,</h1>
         <form method="post" action="/api/send" onsubmit="slideItDown()">
