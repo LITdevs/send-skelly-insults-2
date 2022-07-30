@@ -37,7 +37,7 @@ app.post("/api/send", messageLimiter, (req, res) => {
 	let finalMessage = { message: req.body.message.trim(), ip: req.headers["cf-connecting-ip"] };
 	finalMessage.title = `New insult${req.body.author ? " from " + req.body.author.trim() : ""}`;
 	messageCache.push(finalMessage);
-	res.redirect("/?sent=true")
+	res.redirect("/sent")
 })
 
 app.get("/api/messages", (req, res) => {
@@ -68,7 +68,7 @@ app.post("/api/ipbl", (req, res) => {
 app.get("/", (req, res) => {
 	res.render("index", {sent: false});
 })
-app.get("/?sent=true", (req, res) => {
+app.get("/sent", (req, res) => {
 	res.render("index", {sent: true});
 })
 
