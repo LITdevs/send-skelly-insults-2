@@ -63,11 +63,16 @@
   </head>
   <body>
     <div id="wrapper" class="onespeech"><span id="contents">
-      <h1>Dear Vukky,</h1>
-		  <form method="post" action="/api/send" onsubmit="slideItDown()">
-        <textarea type="text" name="message" maxlength="240" minlength="1" placeholder="Type a message... (max 240 characters)" required></textarea>
-        Regards, <input type="text" name="author" maxlength="40" placeholder="your name (optional)"> <input type="submit" value="Send">
-      </form>
+      <% if(sent) { %>
+        <h1>Message sent!</h1>
+        <p>I hope it's something creative...</p>
+      <% } else {%>
+        <h1>Dear Vukky,</h1>
+        <form method="post" action="/api/send" onsubmit="slideItDown()">
+          <textarea type="text" name="message" maxlength="240" minlength="1" placeholder="Type a message... (max 240 characters)" required></textarea>
+          Regards, <input type="text" name="author" maxlength="40" placeholder="your name (optional)"> <input type="submit" value="Send">
+        </form>
+      <% } %>
     </span></div>
   </body>
 </html>

@@ -68,6 +68,9 @@ app.post("/api/ipbl", (req, res) => {
 app.get("/", (req, res) => {
 	res.render("index");
 })
+app.get("/?sent=true", (req, res) => {
+	res.render("index", {sent: true});
+})
 
 app.listen(83, () => {
 	console.log("Server started on port 83 ┌(ﾟ▽ﾟ)┘ party time");
