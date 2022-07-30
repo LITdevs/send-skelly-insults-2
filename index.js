@@ -78,7 +78,7 @@ app.get("/banned", (req, res) => {
 	res.render("index", {sent: false, banned: true, ratelimit: false});
 })
 app.get("/ratelimited", (req, res) => {
-	res.render("index", {sent: false, banned: true, ratelimit: true});
+	res.render("index", {sent: false, banned: false, ratelimit: true});
 })
 
 app.listen(83, () => {
