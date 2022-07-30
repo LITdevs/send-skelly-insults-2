@@ -1,21 +1,65 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<!--scale on mobile correctly-->
-		<style>
-			html {
-				font-family: 'Comic Sans MS', sans-serif;
-			}
-		</style>
-		<meta name="viewport" content="width=device-width, initial-scale=1">
-	</head>
-	<body>
-		<h2>Send Vukky Insults</h2>
-		<p>Type something in the box, optionally put your name in, and send it to Vukky's phone!</p><br>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Send Vukky Insults</title>
+    <!-- The style.css file allows you to change the look of your web pages.
+         If you include the next line in all your web pages, they will all share the same look.
+         This makes it easier to make new pages for your site. -->
+    <style>
+	  @font-face {
+		font-family: "Terminus";
+		src: url("/img/Terminus.ttf");
+	  }
+      html { 
+		background-color: #140A19; 
+		color: white; 
+		background-image: none; 
+		cursor: auto; 
+		font-family: "Terminus", sans-serif; 
+		height: 100%; 
+		width: 100%
+      }
+      #wrapper.flippy {
+       transform: translate(-50%, -50%) rotateX(360deg);
+      }
+      #wrapper {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        transition: transform 1s ease-in-out;
+        width: 50%;
+        height: 50%;
+        background-color: rgb(20, 10, 25);
+        text-align: center;
+      }
+      #contents {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        margin: 0;
+      }
+	  .onespeech {
+		border-style: solid;
+		border-image-source: url("/resources/nikoborder.png");
+		border-image-slice: 10;
+		border-image-width: 10px;
+		background-color: rgb(20, 10, 25);
+		border-radius: 10px 10px 10px 10px;
+		padding: 10px 15px 10px 15px;
+	  }
+    </style>
+  </head>
+  <body>
+    <div id="wrapper" class="onespeech"><span id="contents">
 		<form method="post" action="/api/send">
-			<input type="text" name="message" maxlength="240" minlength="1" placeholder="Type a message..." required>
-			<input type="text" name="author" maxlength="40" placeholder="Your name (optional)">
-			<input type="submit" value="Send">
-		</form>
-	</body>
+            <input type="text" name="message" maxlength="240" minlength="1" placeholder="Type a message..." required>
+            <input type="text" name="author" maxlength="40" placeholder="Your name (optional)">
+            <input type="submit" value="Send">
+        </form>
+    </span></div>
+  </body>
 </html>
