@@ -66,7 +66,7 @@ app.post("/api/ipbl", (req, res) => {
 })
 
 app.get("/", (req, res) => {
-	res.render("index");
+	res.render("index", {sent: false});
 })
 app.get("/?sent=true", (req, res) => {
 	res.render("index", {sent: true});
