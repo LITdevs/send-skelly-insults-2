@@ -21,18 +21,20 @@
 		height: 100%; 
 		width: 100%
       }
-      #wrapper.flippy {
+      #wrapper.slidedown {
        transform: translate(-50%, -50%) rotateX(360deg);
       }
       #wrapper {
         position: fixed;
         top: 50%;
         left: 50%;
-        transform: translate(-50%, -50%);
         transition: transform 1s ease-in-out;
         width: 20em;
         height: 30em;
         background-color: rgb(20, 10, 25);
+      }
+      #wrapper.normal {
+        transform: translate(-50%, -50%);
       }
 	  .onespeech {
       border-style: solid;
@@ -65,7 +67,7 @@
     </style>
   </head>
   <body>
-    <div id="wrapper" class="onespeech"><span id="contents">
+    <div id="wrapper" class="onespeech normal"><span id="contents">
       <h1>Dear Vukky,</h1>
 		  <form method="post" action="/api/send">
         <textarea type="text" name="message" maxlength="240" minlength="1" placeholder="Type a message... (max 240 characters)" required></textarea>
