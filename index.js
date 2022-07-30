@@ -27,7 +27,7 @@ if (!fs.existsSync("banlist.json")) {
 let banlist = JSON.parse(fs.readFileSync("banlist.json").toString());
 
 app.post("/api/send", messageLimiter, (req, res) => {
-	if (banlist.banned_ips.includes(req.headers["cf-connecting-ip"])) return res.status(403).send("You are banned from using this service.");
+	if (banlist.banned_ips.includes(req.headers["cf-connecting-ip"])) return res.redirect("/banned")
 	let lengthLimit = 240;
 	let authorLimit = 40;
 	if (!req.body.message) return res.status(400).send("No message provided.");
