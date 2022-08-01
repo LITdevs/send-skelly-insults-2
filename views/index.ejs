@@ -69,7 +69,8 @@
         // so that's how i went about it :)
 
         let disallowedContent = ["@everyone", "@here"]
-        if(disallowedContent.includes(document.querySelector("textarea").value)) {
+        let submission = document.querySelector("textarea").value
+        if(disallowedContent.some(v => submission.includes(v))) {
           new Audio("/resources/pc_denied.wav").play();
           return false;
         }
