@@ -63,14 +63,14 @@
     </style>
 
     <script>
-      let disallowedContent = ["@everyone", "@here"]
       function validateSafeness() {
         // yeah, this is a stupid way to do it
         // however these are so stupid that most people who send them probably won't bother bypassing this
         // so that's how i went about it :)
 
+        let disallowedContent = ["@everyone", "@here"]
         if(disallowedContent.includes(document.querySelector("textarea").value)) {
-          new Audio.play("/resources/pc_denied.wav");
+          new Audio("/resources/pc_denied.wav").play();
           return false;
         }
         return true;
