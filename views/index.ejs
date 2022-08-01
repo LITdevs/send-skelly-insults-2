@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Send Vukky Insults</title>
+    <link rel="preload" href="/resources/pc_denied.wav" as="audio">
     <!-- The style.css file allows you to change the look of your web pages.
          If you include the next line in all your web pages, they will all share the same look.
          This makes it easier to make new pages for your site. -->
@@ -60,6 +61,21 @@
       width: 5em;
     }
     </style>
+
+    <script>
+      function validateSafeness() {
+        // yeah, this is a stupid way to do it
+        // however these are so stupid that most people who send them probably won't bother bypassing this
+        // so that's how i went about it :)
+
+        let disallowedContent = ["@everyone", "@here"]
+        if(disallowedContent.includes(document.querySelector("textarea").value)) {
+          new Audio.play("/resources/pc_denied.wav");
+          return false;
+        }
+        return true;
+      }
+    </script>
   </head>
   <body>
     <div id="wrapper" class="onespeech"><span id="contents">
@@ -76,7 +92,7 @@
         <img src="https://vukkybox.com/resources/vukkied.svg" style="position: absolute; left: 68%; top: 78%;" height="100em">
       <% } else {%>
         <h1>Dear Vukky,</h1>
-        <form method="post" action="/api/send" onsubmit="slideItDown()">
+        <form method="post" action="/api/send" onsubmit="return validateSafeness()">
           <textarea type="text" name="message" maxlength="240" minlength="1" placeholder="I hate you, you're really bad, and you should never make stuff again. (max 240 characters)" required></textarea>
           Regards, <input type="text" name="author" maxlength="40" placeholder="your name (optional)"> <input type="submit" value="Send">
         </form>
