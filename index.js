@@ -1,9 +1,7 @@
 var express  = require('express')
 var fs = require('fs')
 var app = express()
-const { Webhook } = require('discord-webhook-node');
 require("dotenv").config();
-const hook = new Webhook(process.env.WEBHOOK);
 const rateLimit = require("express-rate-limit");
 app.use("/resources", express.static('resources'))
 app.use(express.urlencoded({extended:true}));
@@ -54,7 +52,13 @@ app.post("/api/hof", (req, res) => {
 	if (!req.body.auth) return res.sendStatus(403);
 	if (req.body.auth !== process.env.API_KEY) return res.sendStatus(403);
 	if (!req.body.message) return res.sendStatus(400);
-	hook.send(req.body.message);
+	axios.post(process.env.WEBHOOK, {
+		content: req.body.message,
+		allowed_mentions: {
+			users: ["708333380525228082", "125644326037487616", "453924399402319882"],
+			roles: ["869155210197618738"]
+		}
+	})
 	res.sendStatus(200);
 })
 
