@@ -155,8 +155,10 @@
           }
           document.querySelector("audio").onended = function() {
             // drop the visualizer when it's over
-            canvas.remove();
-            document.querySelector("#wrapper").classList.remove("slowfade")
+            setTimeout(() => {
+              canvas.remove();
+              document.querySelector("#wrapper").classList.remove("slowfade")
+            }, 5000);
           }
           window.addEventListener('resize', function(event) {
             visualizer.setRendererSize(window.innerWidth, window.innerHeight);
