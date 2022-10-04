@@ -4,6 +4,9 @@ var app = express()
 const axios = require('axios').default;
 require("dotenv").config();
 const rateLimit = require("express-rate-limit");
+const torDetect = require('tor-detect');
+const badipblocklist = new require("bad-ip-blocklist")
+const ipinfo = new badipblocklist(`${__dirname}/node_modules/bad-ip-blocklist/dist/ipinfo.db`)
 app.use("/resources", express.static('resources'))
 app.use(express.urlencoded({extended:true}));
 app.use(express.json())
@@ -27,9 +30,15 @@ if (!fs.existsSync("banlist.json")) {
 	fs.writeFileSync("banlist.json", JSON.stringify({banned_ips: []}));
 }
 let banlist = JSON.parse(fs.readFileSync("banlist.json").toString());
+async function isProxy(ip) {
+	const isTor = await torDetect(ip);
+	const isDatacenter = ipinfo.isDatacenter(ip) || ipinfo.isBlacklisted(ip);
+	if (isTor || isDatacenter) return true;
+}
 
-app.post("/api/send", messageLimiter, (req, res) => {
+app.post("/api/send", messageLimiter, async (req, res) => {
 	if (banlist.banned_ips.includes(req.headers["cf-connecting-ip"])) return res.redirect("/banned")
+	if (await isProxy(req.headers["cf-connecting-ip"])) return res.redirect("/vpn")
 	let lengthLimit = 240;
 	let authorLimit = 40;
 	if (!req.body.message) return res.status(400).send("No message provided.");
@@ -74,16 +83,19 @@ app.post("/api/ipbl", (req, res) => {
 })
 
 app.get("/", (req, res) => {
-	res.render("index", {sent: false, banned: false, ratelimit: false});
+	res.render("index", {sent: false, banned: false, ratelimit: false, vpn: false});
 })
 app.get("/sent", (req, res) => {
-	res.render("index", {sent: true, banned: false, ratelimit: false});
+	res.render("index", {sent: true, banned: false, ratelimit: false, vpn: false});
 })
 app.get("/banned", (req, res) => {
-	res.render("index", {sent: false, banned: true, ratelimit: false});
+	res.render("index", {sent: false, banned: true, ratelimit: false, vpn: false});
 })
 app.get("/ratelimited", (req, res) => {
-	res.render("index", {sent: false, banned: false, ratelimit: true});
+	res.render("index", {sent: false, banned: false, ratelimit: true, vpn: false});
+})
+app.get("/vpn", (req, res) => {
+	res.render("index", {sent: false, banned: false, ratelimit: false, vpn: true});
 })
 
 app.listen(83, () => {

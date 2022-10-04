@@ -64,14 +64,28 @@
     a {
       color: white;
     }
+
+    #butterchurn {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+    }
+
+    .slowfade {
+      animation: fade 30s forwards;
+    }
+
+    @keyframes fade {
+      from { opacity: 1; }
+      to { opacity: 0.01; }
+    }
     </style>
 
     <script>
       function validateSafeness() {
-        // yeah, this is a stupid way to do it
-        // however these are so stupid that most people who send them probably won't bother bypassing this
-        // so that's how i went about it :)
-
+        // note that these are stripped server-side if bypassed
         let disallowedContent = ["@everyone", "@here"]
         let submission = document.querySelector("textarea").value
         if(disallowedContent.some(v => submission.includes(v))) {
@@ -83,8 +97,10 @@
     </script>
   </head>
   <body>
+    <canvas id="butterchurn"></canvas>
     <div id="wrapper" class="onespeech"><span id="contents">
       <% if(sent) { %>
+        <audio autoplay preload src="/resources/item_get.wav"></audio>
         <h1>Message sent!</h1>
         <p>I hope it's something creative...<br><br>Please note I cannot directly reply to messages sent here. Although I do respond to them in my <a href="https://discord.gg/KR7Z2Bp8yf">Discord server</a> sometimes, the best way to get a reply would be to <a href="mailto:vukky@litdevs.org">send me an e-mail</a>.</a></p>
         <img src="https://vukkybox.com/resources/vukkied.svg" style="position: absolute; left: 68%; top: 78%;" height="100em">
@@ -94,6 +110,58 @@
       <% } else if (ratelimit) {%>
         <h1>Too quick!</h1>
         <p>Please don't spam my phone...</p>
+        <img src="https://vukkybox.com/resources/vukkied.svg" style="position: absolute; left: 68%; top: 78%;" height="100em">
+      <% } else if (vpn) {%>
+        <script type="text/javascript" src="https://unpkg.com/butterchurn"></script>
+        <script type="text/javascript" src="https://unpkg.com/butterchurn-presets"></script>
+        <audio autoplay preload src="/resources/vpn.mp3"></audio>
+        <script>
+          function initButter() {
+            // create the audio context
+            audioContext = new AudioContext();
+            audioContextSource = audioContext.createMediaElementSource(document.querySelector("audio"));
+            audioContextSource.connect(audioContext.destination);
+
+            canvas = document.querySelector("#butterchurn"); // get the canvas
+            presets = {}; // prepare presets object
+            Object.assign(presets, butterchurnPresets.getPresets()); // put the presets in the presets object!!
+            visualizer = butterchurn.default.createVisualizer(audioContext, canvas , { // create visualizer
+              width: window.innerWidth,
+              height: window.innerHeight,
+              pixelRatio: window.devicePixelRatio || 1,
+              textureRatio: 1,
+            });
+            visualizer.loadPreset(presets["martin [shadow harlequins shape code] - fata morgana"]); // load the gamer preset
+            visualizer.connectAudio(audioContextSource); // connect the visualizer to our audio context
+
+            // but before we go, let's fix the canvas
+            document.querySelector("canvas").width = window.innerWidth;
+            document.querySelector("canvas").height = window.innerHeight;
+            // we're done!
+          }
+          initButter();
+
+          function startRenderer() {
+            requestAnimationFrame(() => startRenderer());
+            visualizer.render();
+          }
+          document.querySelector("audio").onplay = function() {
+            setTimeout(() => { // let's time the visualizer with the music
+              startRenderer();
+              setTimeout(() => { // and slowly fade the dialog box
+                document.querySelector("#wrapper").classList.add("slowfade")
+              }, 5000);
+            }, 15000);
+          }
+          window.addEventListener('resize', function(event) {
+            visualizer.setRendererSize(window.innerWidth, window.innerHeight);
+            document.querySelector("canvas").width = window.innerWidth;
+            document.querySelector("canvas").height = window.innerHeight;
+          }, true);
+        </script>
+
+        <h1>Irregularity detected.</h1>
+        <p>Due to frequent abuse, VPNs and Tor are no longer permitted. Please use your actual IP instead.</p>
         <img src="https://vukkybox.com/resources/vukkied.svg" style="position: absolute; left: 68%; top: 78%;" height="100em">
       <% } else {%>
         <h1>Dear Vukky,</h1>
