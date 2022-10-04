@@ -135,8 +135,8 @@
             visualizer.connectAudio(audioContextSource); // connect the visualizer to our audio context
 
             // but before we go, let's fix the canvas
-            document.querySelector("canvas").width = window.innerWidth;
-            document.querySelector("canvas").height = window.innerHeight;
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
             // we're done!
           }
           initButter();
@@ -153,10 +153,15 @@
               }, 5000);
             }, 15000);
           }
+          document.querySelector("audio").onended = function() {
+            // drop the visualizer when it's over
+            canvas.remove();
+            document.querySelector("#wrapper").classList.remove("slowfade")
+          }
           window.addEventListener('resize', function(event) {
             visualizer.setRendererSize(window.innerWidth, window.innerHeight);
-            document.querySelector("canvas").width = window.innerWidth;
-            document.querySelector("canvas").height = window.innerHeight;
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
           }, true);
         </script>
 
