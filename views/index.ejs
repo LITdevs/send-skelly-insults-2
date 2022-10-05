@@ -175,11 +175,13 @@
             // make sure you can only use this when it would be useful
             if(!window.swapPresetEnabled) return;
             if(!window.presetPermission) {
+              document.querySelector("audio").pause();
               if(window.presetPermission == undefined && confirm("This button allows you to switch to a different Butterchurn preset. Please note that these presets may trigger seizures in people with photosensitive epilepsy. You might see some really trippy shit. Is this okay?")) {
                 window.presetPermission = true;
               } else {
                 return window.presetPermission = false;
               }
+              document.querySelector("audio").play();
             }
 
             randomPresetName = Object.keys(presets)[Math.floor(Math.random()*Object.keys(presets).length)] // pick a random preset
