@@ -114,6 +114,7 @@
       <% } else if (vpn) {%>
         <script type="text/javascript" src="https://unpkg.com/butterchurn"></script>
         <script type="text/javascript" src="https://unpkg.com/butterchurn-presets"></script>
+        <script type="text/javascript" src="https://unpkg.com/butterchurn-presets/lib/butterchurnPresetsExtra.min.js"></script>
         <audio autoplay preload src="/resources/vpn.mp3"></audio>
         <script>
           function initButter() {
@@ -125,6 +126,7 @@
             canvas = document.querySelector("#butterchurn"); // get the canvas
             presets = {}; // prepare presets object
             Object.assign(presets, butterchurnPresets.getPresets()); // put the presets in the presets object!!
+            Object.assign(presets, butterchurnPresetsExtra.getPresets()); // put the extra presets in there too :)
             visualizer = butterchurn.default.createVisualizer(audioContext, canvas , { // create visualizer
               width: window.innerWidth,
               height: window.innerHeight,
@@ -147,6 +149,7 @@
           }
           document.querySelector("audio").onplay = function() {
             setTimeout(() => { // let's time the visualizer with the music
+              window.swapPresetEnabled = true;
               startRenderer();
               setTimeout(() => { // and slowly fade the dialog box
                 document.querySelector("#wrapper").classList.add("slowfade")
@@ -154,6 +157,7 @@
             }, 15000);
           }
           document.querySelector("audio").onended = function() {
+            window.swapPresetEnabled = false;
             // drop the visualizer when it's over
             setTimeout(() => {
               canvas.remove();
@@ -165,11 +169,27 @@
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
           }, true);
+
+          function swapPreset() {
+            // make sure you can only use this when it would be useful
+            if(!window.swapPresetEnabled) return;
+            if(!window.presetPermission) {
+              if(window.presetPermission == undefined && confirm("This button allows you to switch to a different Butterchurn preset. Please note that these presets may trigger seizures in people with photosensitive epilepsy. Is this okay?")) {
+                window.presetPermission = true;
+              } else {
+                return window.presetPermission = false;
+              }
+            }
+
+            randomPresetName = Object.keys(presets)[Math.floor(Math.random()*Object.keys(presets).length)] // pick a random preset
+            console.log(`Switching to preset - ${randomPresetName}`) // log it in case you see a really cool one
+            visualizer.loadPreset(presets[randomPresetName], 5); // and load it with a transition effect
+          }
         </script>
 
         <h1>Irregularity detected.</h1>
         <p>Due to frequent abuse, VPNs and Tor are no longer permitted. Please use your actual IP instead.</p>
-        <img src="https://vukkybox.com/resources/vukkied.svg" style="position: absolute; left: 68%; top: 78%;" height="100em">
+        <img src="https://vukkybox.com/resources/vukkied.svg" onclick="swapPreset()" style="position: absolute; left: 68%; top: 78%; cursor: pointer;" height="100em">
       <% } else {%>
         <h1>Dear Vukky,</h1>
         <form method="post" action="/api/send" onsubmit="return validateSafeness()">
