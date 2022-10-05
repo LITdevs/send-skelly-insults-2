@@ -158,6 +158,7 @@
           }
           document.querySelector("audio").onended = function() {
             window.swapPresetEnabled = false;
+            if(window.presetPermission) visualizer.loadPreset(presets["martin [shadow harlequins shape code] - fata morgana"]);
             // drop the visualizer when it's over
             setTimeout(() => {
               canvas.remove();
