@@ -8,3 +8,6 @@ send-skelly-insults-2 uses the following software:
 
 ### ip2location
 This site or product uses IP2Location LITE data available from <a href="https://lite.ip2location.com">https://lite.ip2location.com</a>.
+
+### butterchurn
+[MIT License](https://github.com/jberg/butterchurn/blob/master/LICENSE), Copyright (c) 2013-2018 Jordan Berg
