@@ -7,6 +7,7 @@ const rateLimit = require("express-rate-limit");
 const torDetect = require('tor-detect');
 const badipblocklist = new require("bad-ip-blocklist")
 const ipinfo = new badipblocklist(`${__dirname}/node_modules/bad-ip-blocklist/dist/ipinfo.db`)
+const vpnbanlist = require(`${__dirname}/resources/vpns.json`)
 app.use("/resources", express.static('resources'))
 app.use(express.urlencoded({extended:true}));
 app.use(express.json())
@@ -31,9 +32,19 @@ if (!fs.existsSync("banlist.json")) {
 }
 let banlist = JSON.parse(fs.readFileSync("banlist.json").toString());
 async function isProxy(ip) {
+	let isVpn = false;
+	Object.keys(vpnbanlist).forEach(function(vpnobj) {
+		if(!vpnbanlist[vpnobj].servers) return;
+		vpnbanlist[vpnobj].servers.forEach(function(server) {
+			if(!server.ips) return;
+			server.ips.forEach(function(ipl) {
+				if(ipl == ip) isVpn = vpnobj;
+			})
+		})
+	})
 	const isTor = await torDetect(ip);
 	const isDatacenter = ipinfo.isDatacenter(ip) || ipinfo.isBlacklisted(ip);
-	if (isTor || isDatacenter) return true;
+	if (isVpn || isTor || isDatacenter) return true;
 }
 
 app.post("/api/send", messageLimiter, async (req, res) => {
