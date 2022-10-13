@@ -5,9 +5,10 @@ const axios = require('axios').default;
 require("dotenv").config();
 const rateLimit = require("express-rate-limit");
 const torDetect = require('tor-detect');
-const badipblocklist = new require("bad-ip-blocklist")
-const ipinfo = new badipblocklist(`${__dirname}/node_modules/bad-ip-blocklist/dist/ipinfo.db`)
-const vpnbanlist = require(`${__dirname}/resources/vpns.json`)
+const badipblocklist = new require("bad-ip-blocklist");
+const ipinfo = new badipblocklist(`${__dirname}/node_modules/bad-ip-blocklist/dist/ipinfo.db`);
+const vpnbanlist = require(`${__dirname}/resources/vpns.json`);
+const geeksay = require('geeksay');
 app.use("/resources", express.static('resources'))
 app.use(express.urlencoded({extended:true}));
 app.use(express.json())
@@ -56,6 +57,7 @@ app.post("/api/send", messageLimiter, async (req, res) => {
 	if (req.body.message.trim().length > lengthLimit) return res.status(400).send("Message too long.");
 	if (req.body?.author?.trim().length > authorLimit) return res.status(400).send("Author too long.");
 	if (req.body.message.trim().length < 1) return res.status(400).send("Message too short.");
+	if (req.body.message.includes("🤓")) req.body.message = geeksay(req.body.message);
 	let finalMessage = { message: req.body.message.trim(), ip: req.headers["cf-connecting-ip"] };
 	finalMessage.title = `New insult${req.body.author ? " from " + req.body.author.trim() : ""}`;
 	messageCache.push(finalMessage);
