@@ -61,6 +61,7 @@ app.post("/api/send", messageLimiter, async (req, res) => {
 	let finalMessage = { message: req.body.message.trim(), ip: req.headers["cf-connecting-ip"] };
 	finalMessage.title = `New insult${req.body.author ? " from " + req.body.author.trim() : ""}`;
 	messageCache.push(finalMessage);
+	console.log(finalMessage);
 	res.redirect("/sent")
 })
 
