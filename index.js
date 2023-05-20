@@ -49,6 +49,7 @@ async function isProxy(ip) {
 }
 
 app.post("/api/send", messageLimiter, async (req, res) => {
+	return res.send("This endpoint has been disabled.")
 	if (banlist.banned_ips.includes(req.headers["cf-connecting-ip"])) return res.redirect("/banned")
 	if (await isProxy(req.headers["cf-connecting-ip"])) return res.redirect("/vpn")
 	let lengthLimit = 240;
